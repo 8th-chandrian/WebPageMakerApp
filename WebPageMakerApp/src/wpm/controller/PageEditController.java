@@ -101,7 +101,7 @@ public class PageEditController {
      *
      * @param element The element to add to the tree.
      */
-    public void handleAddElementRequest(HTMLTagPrototype element) {
+   public void handleAddElementRequest(HTMLTagPrototype element) {
 	if (enabled) {
 	    Workspace workspace = (Workspace) app.getWorkspaceComponent();
 
