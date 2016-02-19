@@ -201,11 +201,13 @@ public class Workspace extends AppWorkspaceComponent {
 
 	// PUT BOTH ITEMS IN THE TAB PANE
 	Tab htmlTab = new Tab();
+        htmlTab.setClosable(false);
 	htmlTab.setText("HTML");
 	htmlTab.setContent(htmlView);
 
 	// NOW FOR THE CSS
 	Tab cssTab = new Tab();
+        cssTab.setClosable(false);
 	cssTab.setText("CSS");
 	cssTab.setContent(cssEditor);
 	rightPane.getTabs().add(htmlTab);
