@@ -54,3 +54,10 @@
 .prompt_text_field {
     -fx-font-size: 13pt;
 }
+
+/* CSS CLASS FOR TOOLBARS */
+.bordered_pane {
+    -fx-background-color: #87cefa;
+    -fx-border-color: #9370db;
+    -fx-padding: 10;
+}
