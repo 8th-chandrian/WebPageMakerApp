@@ -21,6 +21,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
@@ -33,6 +35,8 @@ import saf.ui.AppGUI;
 import wpm.data.HTMLTagPrototype;
 import saf.AppTemplate;
 import saf.components.AppWorkspaceComponent;
+import static saf.settings.AppStartupConstants.FILE_PROTOCOL;
+import static saf.settings.AppStartupConstants.PATH_IMAGES;
 import wpm.PropertyType;
 import static wpm.PropertyType.TEMP_PAGE_LOAD_ERROR_MESSAGE;
 import static wpm.PropertyType.TEMP_PAGE_LOAD_ERROR_TITLE;
@@ -162,6 +166,18 @@ public class Workspace extends AppWorkspaceComponent {
         
         //NOTE: You'll probably want to add your remove button here, before you add in all the
         //tags to tagToolbar
+        
+        //STOPPED WORKING HERE
+        //Need to make sure that button has RemoveElement.png image in it
+        
+        Button removeButton = new Button();
+        tagButtons.add(removeButton);
+        removeButton.setMaxWidth(BUTTON_TAG_WIDTH);
+        removeButton.setMinWidth(BUTTON_TAG_WIDTH);
+        removeButton.setPrefWidth(BUTTON_TAG_WIDTH);
+        Image removeImage = new Image(FILE_PROTOCOL + PATH_IMAGES + "RemoveElement.png");
+        removeButton.setGraphic(new ImageView(removeImage));
+        tagToolbar.getChildren().add(removeButton);
 
 	// AND NOW USE THE LOADED TAG TYPES TO ADD BUTTONS
 	for (HTMLTagPrototype tag : dataManager.getTags()) {
