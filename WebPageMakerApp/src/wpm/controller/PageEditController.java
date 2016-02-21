@@ -166,4 +166,28 @@ public class PageEditController {
 	    }
 	}
     }
+    
+    /**
+     * This function responds to when the user tries to remove an element from the tree.
+     * The function removes the selected item by getting the item's parent and then removing the 
+     * selected item from the list of children.
+     * 
+     * NOTE: This function will remove any node in the tree, even those not supposed to be removed,
+     * so its corresponding button must be disabled when essential nodes are selected.
+     */
+    public void handleRemoveElementRequest(){
+        if(enabled){
+            Workspace workspace = (Workspace) app.getWorkspaceComponent();
+
+	    // GET THE TREE TO SEE WHICH NODE IS CURRENTLY SELECTED
+	    TreeView tree = workspace.getHTMLTree();
+	    TreeItem selectedItem = (TreeItem) tree.getSelectionModel().getSelectedItem();
+            
+            //GET THE PARENT OF THE SELECTED NODE, GET ITS CHILDREN, AND 
+            //REMOVE THE SELECTED NODE FROM THAT LIST OF CHILDREN
+	    TreeItem selectedParent = selectedItem.getParent();
+            if(selectedParent != null)
+                selectedParent.getChildren().remove(selectedItem);
+        }
+    }
 }

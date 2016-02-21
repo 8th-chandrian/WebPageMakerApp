@@ -9,6 +9,7 @@ import saf.ui.AppMessageDialogSingleton;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import javafx.event.EventType;
 import javafx.geometry.Orientation;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -164,12 +165,7 @@ public class Workspace extends AppWorkspaceComponent {
 	dataManager.setHTMLRoot(htmlRoot);
 	dataManager.reset();
         
-        //NOTE: You'll probably want to add your remove button here, before you add in all the
-        //tags to tagToolbar
-        
-        //STOPPED WORKING HERE
-        //Need to make sure that button has RemoveElement.png image in it
-        
+        //ADD REMOVE BUTTON BEFORE ADDING ALL OTHER BUTTONS TO TOOLBAR
         Button removeButton = new Button();
         tagButtons.add(removeButton);
         removeButton.setMaxWidth(BUTTON_TAG_WIDTH);
@@ -178,7 +174,14 @@ public class Workspace extends AppWorkspaceComponent {
         Image removeImage = new Image(FILE_PROTOCOL + PATH_IMAGES + "RemoveElement.png");
         removeButton.setGraphic(new ImageView(removeImage));
         tagToolbar.getChildren().add(removeButton);
-
+        
+        removeButton.setOnAction(e -> {
+            pageEditController.handleRemoveElementRequest();
+        });
+        
+        //************** STOPPED WORKING HERE ****************
+        //Need to add event handler for removeButton
+        
 	// AND NOW USE THE LOADED TAG TYPES TO ADD BUTTONS
 	for (HTMLTagPrototype tag : dataManager.getTags()) {
 	    // MAKE THE BUTTON
@@ -356,6 +359,9 @@ public class Workspace extends AppWorkspaceComponent {
 		    });
 		    row++;
 		}
+                
+                //DISABLE ALL TAGS THAT ARE NOT LEGAL CHILDREN
+                //String selectedTagName = selectedTag.getTagName();
 	    }
 
 	    // LOAD THE CSS
