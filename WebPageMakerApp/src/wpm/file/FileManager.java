@@ -10,6 +10,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import javafx.collections.ObservableList;
@@ -216,7 +217,79 @@ public class FileManager implements AppFileComponent {
      */
     @Override
     public void exportData(AppDataComponent data, String filePath) throws IOException {
-	System.out.println("THIS SHOULD EXPORT THE WEB PAGE TO THE temp DIRECTORY, INCLUDING THE CSS FILE");
+        //CLEARS OUT ALL DATA CURRENTLY AT FILEPATH
+        clearFile(filePath);
+        
+        //CREATES A NEW PRINTWRITER TO THE index.html FILE AND GETS THE ROOT OF THE TREE
+	PrintWriter out = new PrintWriter(filePath);
+        DataManager dataManager = (DataManager) data;
+        TreeItem root = dataManager.getHTMLRoot();
+        out.print(DEFAULT_DOCTYPE_DECLARATION);
+        
+        exportDataRecursive(root, out);
+        
+        out.close();
+    }
+    
+    /**
+     * This function recursively traverses the tree and is used in exportData.
+     * 
+     * @param node The node of the tree being traversed
+     * 
+     * @param out The PrintWriter being used to write to index.html
+     */
+    public void exportDataRecursive(TreeItem node, PrintWriter out){
+        Object o = node.getValue();
+        boolean hasClosingTag = false;
+        
+        //CHECK IF NODE CONTAINS AN INSTANCE OF HTMLTAGPROTOTYPE
+        //IF SO, PRINT ITS OPENING TAG WITH ATTRIBUTES INCLUDED
+        if(o != null && o instanceof HTMLTagPrototype){
+            
+            //IF IT DOES, TYPECAST IT AS SUCH
+            HTMLTagPrototype nodeTag = (HTMLTagPrototype) o;
+            String tagName = nodeTag.getTagName();
+            
+            //CHECKS IF THE NODETAG HAS A CLOSING TAG
+            if(nodeTag.hasClosingTag())
+                hasClosingTag = true;
+            
+            //IF IT ISN'T A TEXT TAG, GET ITS ATTRIBUTES AND PRINT THEM AS PART OF THE OPENING TAG
+            if(!tagName.equals("Text")){
+                out.print("<" + tagName);
+                HashMap<String, String> attributes = nodeTag.getAttributes();
+                Collection<String> keys = attributes.keySet();
+                for(String attributeName : keys){
+                    String attributeValue = attributes.get(attributeName);
+                    if(!attributeValue.equals(DEFAULT_ATTRIBUTE_VALUE))
+                        out.print(" " + attributeName + "=\"" + attributeValue + "\"");
+                }
+                out.print(">\n");
+            }
+            
+            //IF IT IS, JUST PRINT ITS TEXT
+            else{
+                String attributeText = nodeTag.getAttributes().get("text");
+                out.print(attributeText + "\n");
+            }
+        }
+        
+        //NOW, GET THE NODE'S CHILDREN, IF IT HAS ANY, AND RECURSE
+        if(!node.isLeaf()){
+            Iterator childIterator = node.getChildren().iterator();
+            while(childIterator.hasNext()){
+                TreeItem child = (TreeItem) childIterator.next();
+                exportDataRecursive(child, out);
+            }
+        }
+        
+        //IF hasClosingTag IS TRUE, NODE MUST CONTAIN AN HTMLTAGPROTOTYPE
+        //PRINT A CLOSING TAG IF SO
+        if(hasClosingTag){
+            HTMLTagPrototype nodeTag = (HTMLTagPrototype) o;
+            String tagName = nodeTag.getTagName();
+            out.print("</" + tagName + ">\n");
+        }
     }
     
     /**

@@ -162,7 +162,9 @@ public class PageEditController {
 	    } catch (IOException ioe) {
 		AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
 		PropertiesManager props = PropertiesManager.getPropertiesManager();
-		dialog.show(props.getProperty(CSS_EXPORT_ERROR_TITLE), props.getProperty(CSS_EXPORT_ERROR_MESSAGE));
+		//dialog.show(props.getProperty(CSS_EXPORT_ERROR_TITLE), props.getProperty(CSS_EXPORT_ERROR_MESSAGE));
+                dialog.show(props.getProperty(CSS_EXPORT_ERROR_TITLE), ioe.getMessage());
+                ioe.printStackTrace();
 	    }
 	}
     }
@@ -188,6 +190,20 @@ public class PageEditController {
 	    TreeItem selectedParent = selectedItem.getParent();
             if(selectedParent != null)
                 selectedParent.getChildren().remove(selectedItem);
+            
+            try {
+                //EXPORT THE TEMP PAGE TO index.html
+		FileManager fileManager = (FileManager) app.getFileComponent();
+		fileManager.exportData(app.getDataComponent(), TEMP_PAGE);
+                
+                //UPDATE THE WEB PAGE DISPLAY USING THE NEW VALUES
+		workspace.getHTMLEngine().reload();
+	    } catch (IOException ioe) {
+		// AN ERROR HAPPENED WRITING TO THE TEMP FILE, NOTIFY THE USER
+		PropertiesManager props = PropertiesManager.getPropertiesManager();
+		AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+		dialog.show(props.getProperty(ADD_ELEMENT_ERROR_TITLE), props.getProperty(ADD_ELEMENT_ERROR_MESSAGE));
+	    }
         }
     }
 }
