@@ -65,6 +65,8 @@ public class Workspace extends AppWorkspaceComponent {
     static final String CLASS_MAX_PANE = "max_pane";
     static final String CLASS_TAG_BUTTON = "tag_button";
     static final String EMPTY_TEXT = "";
+    static final String REMOVE_NODE_TITLE = "Node Removal Query";
+    static final String REMOVE_NODE_MESSAGE = "Would you like to remove the selected node?";
     static final int BUTTON_TAG_WIDTH = 75;
 
     // HERE'S THE APP
@@ -177,7 +179,19 @@ public class Workspace extends AppWorkspaceComponent {
         
         //INIT ITS EVENT HANDLER
         removeButton.setOnAction(e -> {
-            pageEditController.handleRemoveElementRequest();
+            
+            //CHECK WITH THE USER TO SEE IF THEY REALLY WANT TO REMOVE THE SELECTED NODE
+            AppYesNoCancelDialogSingleton yesNoDialog = AppYesNoCancelDialogSingleton.getSingleton();
+            yesNoDialog.show(REMOVE_NODE_TITLE, REMOVE_NODE_MESSAGE);
+        
+            // AND NOW GET THE USER'S SELECTION
+            String selection = yesNoDialog.getSelection();
+            
+            //IF THE USER SAID YES, REMOVE THE SELECTED NODE
+            if(selection.equals(AppYesNoCancelDialogSingleton.YES))
+                pageEditController.handleRemoveElementRequest();
+            
+            //OTHERWISE, DO NOTHING
         });
         
 	// AND NOW USE THE LOADED TAG TYPES TO ADD BUTTONS
