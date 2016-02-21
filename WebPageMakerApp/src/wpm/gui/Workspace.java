@@ -175,12 +175,10 @@ public class Workspace extends AppWorkspaceComponent {
         removeButton.setGraphic(new ImageView(removeImage));
         tagToolbar.getChildren().add(removeButton);
         
+        //INIT ITS EVENT HANDLER
         removeButton.setOnAction(e -> {
             pageEditController.handleRemoveElementRequest();
         });
-        
-        //************** STOPPED WORKING HERE ****************
-        //Need to add event handler for removeButton
         
 	// AND NOW USE THE LOADED TAG TYPES TO ADD BUTTONS
 	for (HTMLTagPrototype tag : dataManager.getTags()) {
@@ -329,6 +327,9 @@ public class Workspace extends AppWorkspaceComponent {
 	    // WE DON'T WANT TO RESPOND TO EVENTS FORCED BY
 	    // OUR INITIALIZATION SELECTIONS
 	    pageEditController.enable(false);
+            
+            //GET THE DATA MANAGER
+            DataManager dataManager = (DataManager) app.getDataComponent();
 
 	    // FIRST CLEAR OUT THE OLD STUFF
 	    tagPropertyLabels.clear();
@@ -361,11 +362,40 @@ public class Workspace extends AppWorkspaceComponent {
 		}
                 
                 //DISABLE ALL TAGS THAT ARE NOT LEGAL CHILDREN
-                //String selectedTagName = selectedTag.getTagName();
+                String selectedTagName = selectedTag.getTagName();
+                
+                //ITERATE THROUGH EVERY TAG TO CHECK IF THEY'RE LEGAL CHILDREN
+                for (HTMLTagPrototype tag : dataManager.getTags()) {
+                    String tagName = tag.getTagName();
+                    Button tagButton = new Button();
+                    
+                    //SEARCH THE ARRAY OF TAGBUTTONS FOR THE BUTTON WITH ITS TEXT EQUAL TO TAGNAME
+                    for(Button b : tagButtons){
+                        if(b.getText().equals(tagName)){
+                            tagButton = b;
+                        }
+                    }
+                    
+                    //IF THE TAG IS A LEGAL PARENT, ENSURE THAT IT IS ENABLED AND HAS THE PROPER STYLE
+                    if(tag.isLegalParent(selectedTagName)){
+                        tagButton.setDisable(false);
+                    }
+                    else{
+                        tagButton.setDisable(true);
+                    }
+                }
+                
+                //CHECK IF SELECTED TAG IS REMOVABLE, AND DISABLE REMOVE BUTTON IF NOT
+                if(selectedTagName.equals("html") || selectedTagName.equals("head") || selectedTagName.equals("title") || 
+                        selectedTagName.equals("link") || selectedTagName.equals("body")){
+                    tagButtons.get(0).setDisable(true);
+                }
+                else{
+                    tagButtons.get(0).setDisable(false);
+                }
 	    }
 
 	    // LOAD THE CSS
-	    DataManager dataManager = (DataManager) app.getDataComponent();
 	    cssEditor.setText(dataManager.getCSSText());
 
 	    // THEN FORCE THE CHANGES TO THE TEMP HTML PAGE
