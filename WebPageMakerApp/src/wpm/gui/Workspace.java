@@ -49,6 +49,7 @@ import wpm.data.DataManager;
 import static wpm.data.HTMLTagPrototype.TAG_HTML;
 import wpm.file.FileManager;
 import static wpm.file.FileManager.TEMP_PAGE;
+import static wpm.file.FileManager.TEMP_CSS_PATH;
 
 /**
  * This class serves as the workspace component for this application, providing
@@ -268,6 +269,7 @@ public class Workspace extends AppWorkspaceComponent {
 	// IT INTO THE WEB ENGINE
 	dataManager.setHTMLRoot(htmlRoot);
 	fileManager.exportData(dataManager, TEMP_PAGE);
+        fileManager.clearFile(TEMP_CSS_PATH);
 	loadTempPage();
     }
 
@@ -368,10 +370,17 @@ public class Workspace extends AppWorkspaceComponent {
 		    attributeTextField.getStyleClass().add(CLASS_PROMPT_TEXT_FIELD);
 		    tagEditorPane.add(attributeLabel, 0, row);
 		    tagEditorPane.add(attributeTextField, 1, row);
-		    attributeTextField.textProperty().addListener(e -> {
-			// UPDATE THE TEMP SITE AS WE TYPE ATTRIBUTE VALUES
-			pageEditController.handleAttributeUpdate(selectedTag, attributeName, attributeTextField.getText());
-		    });
+                    
+                    //ENSURE THAT THE link TEXT FIELDS CANNOT BE CHANGED BY THE USER
+                    if(selectedTag.getTagName().equals("link")){
+                        attributeTextField.setEditable(false);
+                    }
+                    else{
+                        attributeTextField.textProperty().addListener(e -> {
+                            // UPDATE THE TEMP SITE AS WE TYPE ATTRIBUTE VALUES
+                            pageEditController.handleAttributeUpdate(selectedTag, attributeName, attributeTextField.getText());
+                        });
+                    }
 		    row++;
 		}
                 
@@ -411,10 +420,13 @@ public class Workspace extends AppWorkspaceComponent {
 
 	    // LOAD THE CSS
 	    cssEditor.setText(dataManager.getCSSText());
-
+            
 	    // THEN FORCE THE CHANGES TO THE TEMP HTML PAGE
 	    FileManager fileManager = (FileManager) app.getFileComponent();
 	    fileManager.exportData(dataManager, TEMP_PAGE);
+            
+            //RELOAD THE WEBPAGE VIEW
+            htmlEngine.reload();
 
 	    // WE DON'T WANT TO RESPOND TO EVENTS FORCED BY
 	    // OUR INITIALIZATION SELECTIONS

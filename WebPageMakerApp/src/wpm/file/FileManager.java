@@ -256,7 +256,7 @@ public class FileManager implements AppFileComponent {
             
             //IF IT ISN'T A TEXT TAG, GET ITS ATTRIBUTES AND PRINT THEM AS PART OF THE OPENING TAG
             if(!tagName.equals("Text")){
-                out.print("<" + tagName);
+                out.print("\n<" + tagName);
                 HashMap<String, String> attributes = nodeTag.getAttributes();
                 Collection<String> keys = attributes.keySet();
                 for(String attributeName : keys){
@@ -264,13 +264,13 @@ public class FileManager implements AppFileComponent {
                     if(!attributeValue.equals(DEFAULT_ATTRIBUTE_VALUE))
                         out.print(" " + attributeName + "=\"" + attributeValue + "\"");
                 }
-                out.print(">\n");
+                out.print(">");
             }
             
             //IF IT IS, JUST PRINT ITS TEXT
             else{
                 String attributeText = nodeTag.getAttributes().get("text");
-                out.print(attributeText + "\n");
+                out.print(attributeText);
             }
         }
         
