@@ -27,7 +27,7 @@ import wpm.gui.Workspace;
  * editing them.
  *
  * @author Richard McKenna
- * @author ?
+ * @author Noah Young
  * @version 1.0
  */
 public class PageEditController {

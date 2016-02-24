@@ -56,7 +56,7 @@ import static wpm.file.FileManager.TEMP_CSS_PATH;
  * the user interface controls for editing work.
  *
  * @author Richard McKenna
- * @author ?
+ * @author Noah Young
  * @version 1.0
  */
 public class Workspace extends AppWorkspaceComponent {

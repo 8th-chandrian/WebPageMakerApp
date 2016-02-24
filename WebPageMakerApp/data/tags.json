@@ -11,6 +11,6 @@
 	{ "tag": "table",   "attributes": ["class", "id"],          "has_closing_tag": "true",	"legal_parents": ["body", "div"]	},
 	{ "tag": "td",	    "attributes": ["class", "id"],          "has_closing_tag": "true",	"legal_parents": ["tr"]	},
 	{ "tag": "tr",	    "attributes": ["class", "id"],          "has_closing_tag": "true",	"legal_parents": ["table"]	},
-        { "tag": "ul",      "attributes": ["class", "type", "start"],"has_closing_tag": "true",  "legal_parents": ["body", "div", "ol", "p", "td", "ul"]}
+        { "tag": "ul",      "attributes": ["class", "type"],        "has_closing_tag": "true",  "legal_parents": ["body", "div", "ol", "p", "td", "ul"]}
     ]
 }
