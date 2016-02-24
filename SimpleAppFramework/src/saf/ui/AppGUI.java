@@ -100,6 +100,14 @@ public class AppGUI implements AppStyleArbiter {
      * @return This application's primary stage (i.e. window).
      */    
     public Stage getWindow() { return primaryStage; }
+    
+    /**
+     * Accessor method for getting this application's file controller.
+     * Needed for updating whether or not the file has been saved (markAsEdited method)
+     * 
+     * @return This application's file controller
+     */
+    public AppFileController getFileController(){ return fileController; }
 
     /**
      * This method is used to activate/deactivate toolbar buttons when

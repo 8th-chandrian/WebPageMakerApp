@@ -5,6 +5,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.web.WebEngine;
 import properties_manager.PropertiesManager;
+import saf.ui.AppGUI;
 import saf.ui.AppMessageDialogSingleton;
 import static wpm.PropertyType.ADD_ELEMENT_ERROR_MESSAGE;
 import static wpm.PropertyType.ADD_ELEMENT_ERROR_TITLE;
@@ -86,6 +87,7 @@ public class PageEditController {
 		// AND FINALLY UPDATE THE WEB PAGE DISPLAY USING THE NEW VALUES
 		Workspace workspace = (Workspace) app.getWorkspaceComponent();
 		workspace.getHTMLEngine().reload();
+                
 	    } catch (IOException ioe) {
 		// AN ERROR HAPPENED WRITING TO THE TEMP FILE, NOTIFY THE USER
 		PropertiesManager props = PropertiesManager.getPropertiesManager();

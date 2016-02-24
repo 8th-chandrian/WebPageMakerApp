@@ -188,9 +188,11 @@ public class Workspace extends AppWorkspaceComponent {
             // AND NOW GET THE USER'S SELECTION
             String selection = yesNoDialog.getSelection();
             
-            //IF THE USER SAID YES, REMOVE THE SELECTED NODE
-            if(selection.equals(AppYesNoCancelDialogSingleton.YES))
+            //IF THE USER SAID YES, REMOVE THE SELECTED NODE AND ENABLE THE SAVE BUTTON
+            if(selection.equals(AppYesNoCancelDialogSingleton.YES)){
                 pageEditController.handleRemoveElementRequest();
+                gui.getFileController().markAsEdited(gui);
+            }
             
             //OTHERWISE, DO NOTHING
         });
@@ -210,6 +212,8 @@ public class Workspace extends AppWorkspaceComponent {
 		String tagName = tagButton.getText();
 		HTMLTagPrototype clickedTag = dataManager.getTag(tagName);
 		pageEditController.handleAddElementRequest(clickedTag);
+                //ENABLE THE SAVE BUTTON
+                gui.getFileController().markAsEdited(gui);
 	    });
 	}
 
@@ -248,6 +252,8 @@ public class Workspace extends AppWorkspaceComponent {
 	// SETUP THE RESPONSE TO CSS EDITING
 	cssEditor.textProperty().addListener(e -> {
 	    pageEditController.handleCSSEditing(cssEditor.getText());
+            //ENABLE THE SAVE BUTTON
+            gui.getFileController().markAsEdited(gui);
 	});
 
 	// AND NOW PUT IT IN THE WORKSPACE
@@ -379,6 +385,8 @@ public class Workspace extends AppWorkspaceComponent {
                         attributeTextField.textProperty().addListener(e -> {
                             // UPDATE THE TEMP SITE AS WE TYPE ATTRIBUTE VALUES
                             pageEditController.handleAttributeUpdate(selectedTag, attributeName, attributeTextField.getText());
+                            //ENABLE THE SAVE BUTTON
+                            gui.getFileController().markAsEdited(gui);
                         });
                     }
 		    row++;
