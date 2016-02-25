@@ -30,7 +30,7 @@ import static saf.settings.AppStartupConstants.PATH_WORK;
  * that are provided by this framework.
  * 
  * @author Richard McKenna
- * @author ?
+ * @author Noah Young
  * @version 1.0
  */
 public class AppFileController {
@@ -112,6 +112,9 @@ public class AppFileController {
         } catch (IOException ioe) {
             // SOMETHING WENT WRONG, PROVIDE FEEDBACK
 	    dialog.show(props.getProperty(NEW_ERROR_TITLE), props.getProperty(NEW_ERROR_MESSAGE));
+        } catch (NullPointerException npe){
+            // SOMETHING WENT WRONG, PROVIDE FEEDBACK
+	    dialog.show(props.getProperty(NEW_ERROR_TITLE), props.getProperty(NEW_ERROR_MESSAGE));
         }
     }
 
@@ -147,6 +150,9 @@ public class AppFileController {
 	    }
         } catch (IOException ioe) {
 	    AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+	    dialog.show(props.getProperty(SAVE_ERROR_TITLE), props.getProperty(SAVE_ERROR_MESSAGE));
+        } catch (IllegalArgumentException iae){
+            AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
 	    dialog.show(props.getProperty(SAVE_ERROR_TITLE), props.getProperty(SAVE_ERROR_MESSAGE));
         }
     }
@@ -229,25 +235,29 @@ public class AppFileController {
         if (selection.equals(AppYesNoCancelDialogSingleton.YES)) {
             // SAVE THE DATA FILE
             AppDataComponent dataManager = app.getDataComponent();
-	    
-	    if (currentWorkFile == null) {
-		// PROMPT THE USER FOR A FILE NAME
-		FileChooser fc = new FileChooser();
-		fc.setInitialDirectory(new File(PATH_WORK));
-		fc.setTitle(props.getProperty(SAVE_WORK_TITLE));
-		fc.getExtensionFilters().addAll(
-		new ExtensionFilter(props.getProperty(WORK_FILE_EXT_DESC), props.getProperty(WORK_FILE_EXT)));
+	    try{
+                if (currentWorkFile == null) {
+                    // PROMPT THE USER FOR A FILE NAME
+                    FileChooser fc = new FileChooser();
+                    fc.setInitialDirectory(new File(PATH_WORK));
+                    fc.setTitle(props.getProperty(SAVE_WORK_TITLE));
+                    fc.getExtensionFilters().addAll(
+                    new ExtensionFilter(props.getProperty(WORK_FILE_EXT_DESC), props.getProperty(WORK_FILE_EXT)));
 
-		File selectedFile = fc.showSaveDialog(app.getGUI().getWindow());
-		if (selectedFile != null) {
-		    saveWork(selectedFile);
-		    saved = true;
-		}
-	    }
-	    else {
-		saveWork(currentWorkFile);
-		saved = true;
-	    }
+                    File selectedFile = fc.showSaveDialog(app.getGUI().getWindow());
+                    if (selectedFile != null) {
+                        saveWork(selectedFile);
+                        saved = true;
+                    }
+                }
+                else {
+                    saveWork(currentWorkFile);
+                    saved = true;
+                }
+            } catch (IllegalArgumentException iae){
+                AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+                dialog.show(props.getProperty(SAVE_ERROR_TITLE), props.getProperty(SAVE_ERROR_MESSAGE));
+            }
         } // IF THE USER SAID CANCEL, THEN WE'LL TELL WHOEVER
         // CALLED THIS THAT THE USER IS NOT INTERESTED ANYMORE
         else if (selection.equals(AppYesNoCancelDialogSingleton.CANCEL)) {
